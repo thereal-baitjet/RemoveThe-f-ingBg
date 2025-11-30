@@ -4,7 +4,7 @@ A professional, monetizable background removal web application with multiple API
 
 ## 🚀 Live Demo
 
-**Website URL:** https://suuogy3nbrvb2.ok.kimi.link
+https://remove-the-f-ing-ai3fsq67u-thereal-baitjets-projects.vercel.app/
 
 ## ✨ Features
 
