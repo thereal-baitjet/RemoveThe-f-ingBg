@@ -6,6 +6,8 @@ let freeUsesRemaining = 3;
 let backgroundRemovalApp;
 let latestResultURL = null;
 let latestInputURL = null;
+let latestInputFile = null;
+let latestAfterPlaceholderURL = null;
 
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
@@ -186,6 +188,8 @@ function initializeUploadZone() {
         let progress = 0;
         const progressBar = document.getElementById('progress-bar');
         const progressText = document.getElementById('progress-text');
+        setBeforePreview(file);
+        setAfterPlaceholder(file);
         
         const processingInterval = setInterval(() => {
             progress += Math.random() * 15 + 5;
@@ -196,9 +200,18 @@ function initializeUploadZone() {
             
             if (progress >= 100) {
                 clearInterval(processingInterval);
-                setTimeout(() => {
+                setTimeout(async () => {
                     processingArea.classList.add('hidden');
                     resultsArea.classList.remove('hidden');
+                    
+                    // Create a quick visual after-image so the slider always shows a comparison
+                    const fallbackResult = await generateFallbackResult(file);
+                    if (latestResultURL && latestResultURL !== fallbackResult) {
+                        URL.revokeObjectURL(latestResultURL);
+                    }
+                    latestResultURL = fallbackResult;
+                    updateComparisonSlider(latestInputURL, fallbackResult);
+
                     freeUsesRemaining--;
                     showUsageWarning();
                 }, 500);
@@ -286,10 +299,25 @@ function initializeScrollAnimations() {
 function initializeComparisonSlider() {
     const slider = document.querySelector('.slider-handle');
     const afterImage = document.querySelector('.after-image');
+    const container = document.querySelector('.comparison-slider');
     
-    if (!slider || !afterImage) return;
+    if (!slider || !afterImage || !container) return;
     
     let isDragging = false;
+
+    const setSplit = (percentage) => {
+        const clamped = Math.max(0, Math.min(100, percentage));
+        slider.style.left = clamped + '%';
+        afterImage.style.clipPath = `inset(0 ${100 - clamped}% 0 0)`;
+        afterImage.style.webkitClipPath = `inset(0 ${100 - clamped}% 0 0)`;
+    };
+
+    const updateFromClientX = (clientX) => {
+        const rect = container.getBoundingClientRect();
+        const x = clientX - rect.left;
+        const percentage = (x / rect.width) * 100;
+        setSplit(percentage);
+    };
     
     slider.addEventListener('mousedown', (e) => {
         isDragging = true;
@@ -298,14 +326,7 @@ function initializeComparisonSlider() {
     
     document.addEventListener('mousemove', (e) => {
         if (!isDragging) return;
-        
-        const container = document.querySelector('.comparison-slider');
-        const rect = container.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
-        
-        slider.style.left = percentage + '%';
-        afterImage.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
+        updateFromClientX(e.clientX);
     });
     
     document.addEventListener('mouseup', () => {
@@ -320,19 +341,26 @@ function initializeComparisonSlider() {
     
     document.addEventListener('touchmove', (e) => {
         if (!isDragging) return;
-        
-        const container = document.querySelector('.comparison-slider');
-        const rect = container.getBoundingClientRect();
-        const x = e.touches[0].clientX - rect.left;
-        const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
-        
-        slider.style.left = percentage + '%';
-        afterImage.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
+        updateFromClientX(e.touches[0].clientX);
     });
     
     document.addEventListener('touchend', () => {
         isDragging = false;
     });
+    
+    // Allow tapping the track to reposition the split
+    container.addEventListener('mousedown', (e) => {
+        if (e.target === slider) return;
+        updateFromClientX(e.clientX);
+    });
+    
+    container.addEventListener('touchstart', (e) => {
+        if (e.target === slider) return;
+        updateFromClientX(e.touches[0].clientX);
+    });
+    
+    // Initial 50/50 split
+    setSplit(50);
 }
 
 // Show usage warning
@@ -498,6 +526,75 @@ function initializeAPIStatus() {
     // This can be expanded to show API usage in the UI
 }
 
+// Utility to keep the "before" preview in sync with the uploaded file
+function setBeforePreview(file) {
+    const beforeImage = document.getElementById('before-image');
+    if (!beforeImage || !file) return;
+
+    // Avoid recreating/revoking if the same file is used
+    if (latestInputFile === file && latestInputURL) {
+        beforeImage.src = latestInputURL;
+        return;
+    }
+
+    if (latestInputURL) {
+        URL.revokeObjectURL(latestInputURL);
+    }
+    latestInputFile = file;
+    latestInputURL = URL.createObjectURL(file);
+    beforeImage.src = latestInputURL;
+}
+
+// Temporarily show the uploaded image on the "after" side until processing finishes
+function setAfterPlaceholder(file) {
+    const afterImage = document.getElementById('after-image');
+    if (!afterImage || !file) return;
+
+    if (latestAfterPlaceholderURL && latestAfterPlaceholderURL !== latestInputURL) {
+        URL.revokeObjectURL(latestAfterPlaceholderURL);
+    }
+
+    // Reuse the same object URL as the input preview
+    latestAfterPlaceholderURL = latestInputURL || URL.createObjectURL(file);
+    afterImage.src = latestAfterPlaceholderURL;
+    afterImage.style.clipPath = 'inset(0 50% 0 0)';
+    afterImage.style.webkitClipPath = 'inset(0 50% 0 0)';
+}
+
+// Keep the comparison slider images in sync and reset the handle
+function updateComparisonSlider(beforeSrc, afterSrc) {
+    const beforeImage = document.getElementById('before-image');
+    const afterImage = document.getElementById('after-image');
+    const sliderHandle = document.querySelector('.slider-handle');
+
+    if (beforeImage && beforeSrc) {
+        beforeImage.src = beforeSrc;
+    }
+    if (afterImage && afterSrc) {
+        afterImage.src = afterSrc;
+        afterImage.style.clipPath = 'inset(0 50% 0 0)';
+        afterImage.style.webkitClipPath = 'inset(0 50% 0 0)';
+    }
+    if (sliderHandle) {
+        sliderHandle.style.left = '50%';
+    }
+}
+
+// Simple canvas-based fallback to generate an "after" image if live APIs fail
+async function generateFallbackResult(file) {
+    if (typeof CanvasBackgroundRemover === 'undefined' || !file) {
+        return latestAfterPlaceholderURL || latestInputURL;
+    }
+
+    try {
+        const remover = new CanvasBackgroundRemover();
+        return await remover.removeBackground(file);
+    } catch (err) {
+        console.warn('Fallback processing failed:', err);
+        return latestAfterPlaceholderURL || latestInputURL;
+    }
+}
+
 // Enhanced file upload handler with real API integration
 async function handleFileUploadWithAPI(file) {
     if (!backgroundRemovalApp) {
@@ -523,16 +620,9 @@ async function handleFileUploadWithAPI(file) {
     
     uploadZone.style.display = 'none';
     processingArea.classList.remove('hidden');
-    
-    // Update before image preview with the uploaded file
-    const beforeImage = document.getElementById('before-image');
-    if (beforeImage) {
-        if (latestInputURL) {
-            URL.revokeObjectURL(latestInputURL);
-        }
-        latestInputURL = URL.createObjectURL(file);
-        beforeImage.src = latestInputURL;
-    }
+
+    setBeforePreview(file);
+    setAfterPlaceholder(file);
     
     try {
         // Process with progress tracking
@@ -549,34 +639,25 @@ async function handleFileUploadWithAPI(file) {
             processingArea.classList.add('hidden');
             resultsArea.classList.remove('hidden');
             
-            // Update before image with the uploaded file (ensure fresh preview)
+            // Ensure the before image stays synced with the uploaded file
+            setBeforePreview(file);
             const beforeImage = document.getElementById('before-image');
-            if (beforeImage && file) {
-                if (latestInputURL) {
-                    URL.revokeObjectURL(latestInputURL);
-                }
-                latestInputURL = URL.createObjectURL(file);
-                beforeImage.src = latestInputURL;
-            }
+            const beforeSrc = beforeImage ? beforeImage.src : latestInputURL;
 
             // Update result image
-            const afterImage = document.getElementById('after-image');
-            if (afterImage && result.result) {
+            if (result.result) {
                 if (latestResultURL) {
                     URL.revokeObjectURL(latestResultURL);
                 }
+                if (latestAfterPlaceholderURL && latestAfterPlaceholderURL !== latestInputURL) {
+                    URL.revokeObjectURL(latestAfterPlaceholderURL);
+                    latestAfterPlaceholderURL = null;
+                }
                 latestResultURL = result.result;
-                afterImage.src = result.result;
             }
-
-            // Reset comparison slider position
-            const sliderHandle = document.querySelector('.slider-handle');
-            if (sliderHandle) {
-                sliderHandle.style.left = '50%';
-            }
-            if (afterImage) {
-                afterImage.style.clipPath = 'inset(0 50% 0 0)';
-            }
+            
+            // Keep comparison slider in sync with the new images
+            updateComparisonSlider(beforeSrc, latestResultURL);
             
             // Update API info
             const apiInfo = document.getElementById('api-info');
@@ -597,8 +678,26 @@ async function handleFileUploadWithAPI(file) {
     } catch (error) {
         console.error('Processing failed:', error);
         processingArea.classList.add('hidden');
-        uploadZone.style.display = 'block';
-        showNotification('Processing failed: ' + error.message, 'error');
+        
+        // Fall back to a local preview so the slider still shows both images
+        try {
+            const fallbackResult = await generateFallbackResult(file);
+            if (latestResultURL && latestResultURL !== fallbackResult) {
+                URL.revokeObjectURL(latestResultURL);
+            }
+            latestResultURL = fallbackResult;
+            
+            setBeforePreview(file);
+            updateComparisonSlider(latestInputURL, fallbackResult);
+            
+            uploadZone.style.display = 'none';
+            resultsArea.classList.remove('hidden');
+            showNotification('Live API unavailable. Showing preview instead.', 'warning');
+        } catch (fallbackError) {
+            console.error('Fallback preview failed:', fallbackError);
+            uploadZone.style.display = 'block';
+            showNotification('Processing failed: ' + error.message, 'error');
+        }
     }
 }
 
