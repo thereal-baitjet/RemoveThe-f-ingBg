@@ -2,7 +2,9 @@
 let particleSystem;
 let testimonialsCarousel;
 let processedImages = 47832;
-let freeUsesRemaining = 3;
+const FREE_USES_PER_DAY = 3;
+const FREE_USE_STORAGE_KEY = 'clearbgFreeUses';
+let freeUsesRemaining = FREE_USES_PER_DAY;
 let backgroundRemovalApp;
 let latestResultURL = null;
 let latestInputURL = null;
@@ -11,6 +13,7 @@ let latestAfterPlaceholderURL = null;
 
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
+    initializeUsageLimits();
     initializeParticleSystem();
     initializeCounters();
     initializeBackgroundRemovalApp();
@@ -19,7 +22,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeCountdownTimer();
     initializeScrollAnimations();
     initializeComparisonSlider();
-    showUsageWarning();
     initializeAPIStatus();
 });
 
@@ -163,6 +165,11 @@ function initializeUploadZone() {
     
     // Handle file upload and processing
     function handleFileUpload(file) {
+        if (!hasFreeUsesRemaining()) {
+            showNotification('Free limit reached. Upgrade for more downloads.', 'warning');
+            return;
+        }
+
         if (!file.type.startsWith('image/')) {
             alert('Please select an image file.');
             return;
@@ -212,8 +219,7 @@ function initializeUploadZone() {
                     latestResultURL = fallbackResult;
                     updateComparisonSlider(latestInputURL, fallbackResult);
 
-                    freeUsesRemaining--;
-                    showUsageWarning();
+                    consumeFreeUse();
                 }, 500);
             }
         }, 200);
@@ -361,6 +367,60 @@ function initializeComparisonSlider() {
     
     // Initial 50/50 split
     setSplit(50);
+}
+
+// Persist and enforce daily free usage
+function initializeUsageLimits() {
+    const today = getTodayKey();
+    try {
+        const raw = localStorage.getItem(FREE_USE_STORAGE_KEY);
+        if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed.date === today && typeof parsed.remaining === 'number') {
+                freeUsesRemaining = Math.max(0, parsed.remaining);
+            } else {
+                freeUsesRemaining = FREE_USES_PER_DAY;
+            }
+        } else {
+            freeUsesRemaining = FREE_USES_PER_DAY;
+        }
+    } catch (err) {
+        console.warn('Failed to load usage limits from storage:', err);
+        freeUsesRemaining = FREE_USES_PER_DAY;
+    }
+
+    persistFreeUseState();
+    showUsageWarning();
+}
+
+function consumeFreeUse() {
+    if (freeUsesRemaining <= 0) return false;
+    freeUsesRemaining = Math.max(0, freeUsesRemaining - 1);
+    persistFreeUseState();
+    showUsageWarning();
+    return true;
+}
+
+function hasFreeUsesRemaining() {
+    return freeUsesRemaining > 0;
+}
+
+function persistFreeUseState() {
+    try {
+        localStorage.setItem(
+            FREE_USE_STORAGE_KEY,
+            JSON.stringify({
+                date: getTodayKey(),
+                remaining: freeUsesRemaining
+            })
+        );
+    } catch (err) {
+        console.warn('Failed to persist usage limits:', err);
+    }
+}
+
+function getTodayKey() {
+    return new Date().toISOString().slice(0, 10);
 }
 
 // Show usage warning
@@ -602,6 +662,11 @@ async function handleFileUploadWithAPI(file) {
         handleFileUpload(file);
         return;
     }
+
+    if (!hasFreeUsesRemaining()) {
+        showNotification('Free limit reached. Upgrade for more downloads.', 'warning');
+        return;
+    }
     
     if (!file.type.startsWith('image/')) {
         showNotification('Please select an image file.', 'error');
@@ -667,8 +732,7 @@ async function handleFileUploadWithAPI(file) {
                 apiInfo.className = `text-sm text-${isLiveAPI ? 'green' : 'yellow'}-600`;
             }
             
-            freeUsesRemaining--;
-            showUsageWarning();
+            consumeFreeUse();
             
             showNotification('Background removed successfully!', 'success');
         } else {
@@ -698,67 +762,6 @@ async function handleFileUploadWithAPI(file) {
             uploadZone.style.display = 'block';
             showNotification('Processing failed: ' + error.message, 'error');
         }
-    }
-}
-
-// API configuration interface
-function showAPIConfiguration() {
-    const modal = document.createElement('div');
-    modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
-    modal.innerHTML = `
-        <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-            <h3 class="text-lg font-semibold text-primary mb-4">API Configuration</h3>
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Remove.bg API Key</label>
-                    <input type="text" id="removebg-key" class="w-full px-3 py-2 border border-gray-300 rounded-md" 
-                           placeholder="Enter your Remove.bg API key">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">PhotoRoom API Key</label>
-                    <input type="text" id="photoroom-key" class="w-full px-3 py-2 border border-gray-300 rounded-md" 
-                           placeholder="Enter your PhotoRoom API key">
-                </div>
-                <div class="flex space-x-3">
-                    <button onclick="saveAPIKeys()" class="bg-secondary text-white px-4 py-2 rounded-md">Save</button>
-                    <button onclick="closeAPIModal()" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md">Cancel</button>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    document.body.appendChild(modal);
-    
-    // Load existing keys
-    if (backgroundRemovalApp) {
-        const status = backgroundRemovalApp.getAPIStatus();
-        document.getElementById('removebg-key').value = status.stats.find(s => s.name === 'Remove.bg')?.hasKey ? '••••••••••••••••' : '';
-        document.getElementById('photoroom-key').value = status.stats.find(s => s.name === 'PhotoRoom')?.hasKey ? '••••••••••••••••' : '';
-    }
-}
-
-function saveAPIKeys() {
-    const removebgKey = document.getElementById('removebg-key').value;
-    const photoroomKey = document.getElementById('photoroom-key').value;
-    
-    if (backgroundRemovalApp) {
-        if (removebgKey && !removebgKey.includes('•')) {
-            backgroundRemovalApp.configureAPI('removebg', removebgKey);
-        }
-        if (photoroomKey && !photoroomKey.includes('•')) {
-            backgroundRemovalApp.configureAPI('photoroom', photoroomKey);
-        }
-        
-        showNotification('API keys saved successfully!', 'success');
-    }
-    
-    closeAPIModal();
-}
-
-function closeAPIModal() {
-    const modal = document.querySelector('.fixed.inset-0');
-    if (modal) {
-        document.body.removeChild(modal);
     }
 }
 
