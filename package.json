@@ -1,0 +1,9 @@
+{
+  "name": "clearbg",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "echo \"Run 'vercel dev --ignore-dev-command' directly\" && exit 1",
+    "start": "echo \"Run 'vercel dev --ignore-dev-command' directly\" && exit 1"
+  }
+}

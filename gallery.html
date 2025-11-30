@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - ClearBG | Before & After Examples</title>
+    <meta name="description" content="See the quality of our AI background removal. Browse before and after examples from real customers using ClearBG.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Core Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    
+    <!-- Splide CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#2D3748',
+                        'secondary': '#4FD1C7',
+                        'accent': '#F6AD55',
+                        'bg-light': '#FAFAFA'
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .gallery-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .comparison-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(79, 209, 199, 0.9), rgba(246, 173, 85, 0.9));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .gallery-item:hover .comparison-overlay {
+            opacity: 1;
+        }
+        
+        .filter-tab {
+            transition: all 0.3s ease;
+        }
+        
+        .filter-tab.active {
+            background-color: #4FD1C7;
+            color: white;
+        }
+        
+        .quality-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .comparison-slider-modal {
+            position: relative;
+            width: 600px;
+            height: 400px;
+        }
+        
+        .modal-before, .modal-after {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .modal-after {
+            clip-path: inset(0 50% 0 0);
+        }
+        
+        .modal-slider {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 100%;
+            background: #F6AD55;
+            cursor: ew-resize;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="bg-bg-light font-sans">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white/95 backdrop-blur-md border-b border-gray-200 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <img src="resources/logo-icon.png" alt="ClearBG" class="w-8 h-8">
+                    <span class="text-xl font-bold text-primary">ClearBG</span>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-600 hover:text-primary transition-colors">Tool</a>
+                    <a href="pricing.html" class="text-gray-600 hover:text-primary transition-colors">Pricing</a>
+                    <a href="gallery.html" class="text-primary font-medium border-b-2 border-secondary pb-1">Gallery</a>
+                    <a href="about.html" class="text-gray-600 hover:text-primary transition-colors">About</a>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button class="text-gray-600 hover:text-primary transition-colors">Sign In</button>
+                    <button class="bg-secondary text-white px-4 py-2 rounded-lg hover:bg-teal-600 transition-colors">
+                        Get Premium
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Gallery Hero -->
+    <section class="pt-24 pb-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h1 class="text-5xl font-bold text-primary mb-6">
+                    Quality That Speaks for Itself
+                </h1>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+                    Explore real examples of our AI-powered background removal. Click any image to see the before and after comparison.
+                </p>
+                
+                <!-- Quality Stats -->
+                <div class="grid md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-secondary mb-2">98%</div>
+                        <div class="text-gray-600">Accuracy Rate</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-secondary mb-2">&lt;3s</div>
+                        <div class="text-gray-600">Processing Time</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-secondary mb-2">4K</div>
+                        <div class="text-gray-600">Max Resolution</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-secondary mb-2">50K+</div>
+                        <div class="text-gray-600">Images Processed</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filter Tabs -->
+    <section class="pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-wrap justify-center gap-4">
+                <button class="filter-tab active px-6 py-3 rounded-full bg-gray-100 text-gray-700 font-medium" data-filter="all">
+                    All Examples
+                </button>
+                <button class="filter-tab px-6 py-3 rounded-full bg-gray-100 text-gray-700 font-medium" data-filter="people">
+                    People
+                </button>
+                <button class="filter-tab px-6 py-3 rounded-full bg-gray-100 text-gray-700 font-medium" data-filter="products">
+                    Products
+                </button>
+                <button class="filter-tab px-6 py-3 rounded-full bg-gray-100 text-gray-700 font-medium" data-filter="animals">
+                    Animals
+                </button>
+                <button class="filter-tab px-6 py-3 rounded-full bg-gray-100 text-gray-700 font-medium" data-filter="complex">
+                    Complex
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Grid -->
+    <section class="pb-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-6" id="gallery-grid">
+                
+                <!-- Gallery Item 1 - Product -->
+                <div class="gallery-item bg-white shadow-lg" data-category="products" data-before="resources/demo-before.jpg" data-after="resources/demo-after.jpg">
+                    <div class="relative">
+                        <img src="resources/demo-after.jpg" alt="Smartphone with removed background" class="w-full h-64 object-cover">
+                        <div class="quality-badge">4K Quality</div>
+                        <div class="comparison-overlay">
+                            <div class="text-center">
+                                <svg class="w-8 h-8 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
+                                </svg>
+                                <div>Click to Compare</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-primary mb-1">Smartphone Product Shot</h3>
+                        <p class="text-sm text-gray-600">Clean e-commerce ready image</p>
+                        <div class="flex items-center mt-2 text-xs text-gray-500">
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full">Product</span>
+                            <span class="ml-auto">Processing: 2.1s</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Gallery Item 2 - Person -->
+                <div class="gallery-item bg-white shadow-lg" data-category="people" data-before="resources/testimonial-1.jpg" data-after="resources/testimonial-1.jpg">
+                    <div class="relative">
+                        <img src="resources/testimonial-1.jpg" alt="Professional headshot" class="w-full h-64 object-cover">
+                        <div class="quality-badge">HD Quality</div>
+                        <div class="comparison-overlay">
+                            <div class="text-center">
+                                <svg class="w-8 h-8 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
+                                </svg>
+                                <div>Click to Compare</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-primary mb-1">Professional Headshot</h3>
+                        <p class="text-sm text-gray-600">Perfect for LinkedIn profiles</p>
+                        <div class="flex items-center mt-2 text-xs text-gray-500">
+                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">People</span>
+                            <span class="ml-auto">Processing: 1.8s</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Gallery Item 3 - Complex -->
+                <div class="gallery-item bg-white shadow-lg" data-category="complex" data-before="resources/hero-bg.jpg" data-after="resources/hero-bg.jpg">
+                    <div class="relative">
+                        <img src="resources/hero-bg.jpg" alt="Complex background removal" class="w-full h-64 object-cover">
+                        <div class="quality-badge">4K Quality</div>
+                        <div class="comparison-overlay">
+                            <div class="text-center">
+                                <svg class="w-8 h-8 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
+                                </svg>
+                                <div>Click to Compare</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-primary mb-1">Complex Abstract Art</h3>
+                        <p class="text-sm text-gray-600">Advanced edge detection</p>
+                        <div class="flex items-center mt-2 text-xs text-gray-500">
+                            <span class="bg-red-100 text-red-800 px-2 py-1 rounded-full">Complex</span>
+                            <span class="ml-auto">Processing: 3.2s</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Gallery Item 4 - Product -->
+                <div class="gallery-item bg-white shadow-lg" data-category="products" data-before="resources/demo-before.jpg" data-after="resources/demo-after.jpg">
+                    <div class="relative">
+                        <img src="resources/demo-after.jpg" alt="Laptop with removed background" class="w-full h-64 object-cover">
+                        <div class="quality-badge">4K Quality</div>
+                        <div class="comparison-overlay">
+                            <div class="text-center">
+                                <svg class="w-8 h-8 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
+                                </svg>
+                                <div>Click to Compare</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-primary mb-1">MacBook Pro</h3>
+                        <p class="text-sm text-gray-600">E-commerce product photography</p>
+                        <div class="flex items-center mt-2 text-xs text-gray-500">
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full">Product</span>
+                            <span class="ml-auto">Processing: 2.3s</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Gallery Item 5 - Person -->
+                <div class="gallery-item bg-white shadow-lg" data-category="people" data-before="resources/testimonial-2.jpg" data-after="resources/testimonial-2.jpg">
+                    <div class="relative">
+                        <img src="resources/testimonial-2.jpg" alt="Professional portrait" class="w-full h-64 object-cover">
+                        <div class="quality-badge">HD Quality</div>
+                        <div class="comparison-overlay">
+                            <div class="text-center">
+                                <svg class="w-8 h-8 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
+                                </svg>
+                                <div>Click to Compare</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-primary mb-1">Creative Director</h3>
+                        <p class="text-sm text-gray-600">Perfect hair detail preservation</p>
+                        <div class="flex items-center mt-2 text-xs text-gray-500">
+                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">People</span>
+                            <span class="ml-auto">Processing: 1.9s</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Gallery Item 6 - Animal -->
+                <div class="gallery-item bg-white shadow-lg" data-category="animals" data-before="resources/testimonial-3.jpg" data-after="resources/testimonial-3.jpg">
+                    <div class="relative">
+                        <img src="resources/testimonial-3.jpg" alt="Pet portrait" class="w-full h-64 object-cover">
+                        <div class="quality-badge">HD Quality</div>
+                        <div class="comparison-overlay">
+                            <div class="text-center">
+                                <svg class="w-8 h-8 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
+                                </svg>
+                                <div>Click to Compare</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-primary mb-1">Golden Retriever</h3>
+                        <p class="text-sm text-gray-600">Fur detail perfectly preserved</p>
+                        <div class="flex items-center mt-2 text-xs text-gray-500">
+                            <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">Animals</span>
+                            <span class="ml-auto">Processing: 2.7s</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Gallery Item 7 - Product -->
+                <div class="gallery-item bg-white shadow-lg" data-category="products" data-before="resources/demo-before.jpg" data-after="resources/demo-after.jpg">
+                    <div class="relative">
+                        <img src="resources/demo-after.jpg" alt="Watch with removed background" class="w-full h-64 object-cover">
+                        <div class="quality-badge">4K Quality</div>
+                        <div class="comparison-overlay">
+                            <div class="text-center">
+                                <svg class="w-8 h-8 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
+                                </svg>
+                                <div>Click to Compare</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-primary mb-1">Luxury Watch</h3>
+                        <p class="text-sm text-gray-600">High-end product photography</p>
+                        <div class="flex items-center mt-2 text-xs text-gray-500">
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full">Product</span>
+                            <span class="ml-auto">Processing: 2.0s</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Gallery Item 8 - Complex -->
+                <div class="gallery-item bg-white shadow-lg" data-category="complex" data-before="resources/hero-bg.jpg" data-after="resources/hero-bg.jpg">
+                    <div class="relative">
+                        <img src="resources/hero-bg.jpg" alt="Detailed artwork" class="w-full h-64 object-cover">
+                        <div class="quality-badge">4K Quality</div>
+                        <div class="comparison-overlay">
+                            <div class="text-center">
+                                <svg class="w-8 h-8 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
+                                </svg>
+                                <div>Click to Compare</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-primary mb-1">Intricate Design</h3>
+                        <p class="text-sm text-gray-600">Complex pattern recognition</p>
+                        <div class="flex items-center mt-2 text-xs text-gray-500">
+                            <span class="bg-red-100 text-red-800 px-2 py-1 rounded-full">Complex</span>
+                            <span class="ml-auto">Processing: 3.5s</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-primary mb-4">Perfect for Every Use Case</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    From e-commerce to social media, see how ClearBG delivers professional results across all industries.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center space-y-4">
+                    <div class="w-16 h-16 mx-auto bg-secondary/20 rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-primary">E-commerce</h3>
+                    <p class="text-gray-600">Clean product photos that increase conversion rates by up to 30%</p>
+                </div>
+                
+                <div class="text-center space-y-4">
+                    <div class="w-16 h-16 mx-auto bg-accent/20 rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2m-9 0h10m-10 0a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-primary">Social Media</h3>
+                    <p class="text-gray-600">Eye-catching content that stands out in crowded feeds</p>
+                </div>
+                
+                <div class="text-center space-y-4">
+                    <div class="w-16 h-16 mx-auto bg-primary/20 rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-primary">Real Estate</h3>
+                    <p class="text-gray-600">Professional property photos that sell homes faster</p>
+                </div>
+                
+                <div class="text-center space-y-4">
+                    <div class="w-16 h-16 mx-auto bg-secondary/20 rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-primary">Graphic Design</h3>
+                    <p class="text-gray-600">Perfect assets for creative projects and designs</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-primary text-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl font-bold mb-4">Ready to Transform Your Images?</h2>
+            <p class="text-xl text-gray-300 mb-8">
+                Join thousands of professionals who trust ClearBG for perfect background removal
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button class="bg-secondary text-white px-8 py-4 rounded-lg font-semibold hover:bg-teal-600 transition-colors">
+                    Try Free Now
+                </button>
+                <button class="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-primary transition-colors">
+                    View Pricing
+                </button>
+            </div>
+            
+            <div class="mt-8 text-sm text-gray-400">
+                No signup required • Instant results • Free to start
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Modal -->
+    <div id="comparison-modal" class="modal">
+        <div class="modal-content">
+            <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-xl font-semibold text-primary">Before & After Comparison</h3>
+                <button id="close-modal" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6">
+                <div class="comparison-slider-modal mx-auto">
+                    <img id="modal-before" src="" alt="Before" class="modal-before">
+                    <img id="modal-after" src="" alt="After" class="modal-after">
+                    <div class="modal-slider" style="left: 50%"></div>
+                </div>
+                <div class="text-center mt-4 text-gray-600">
+                    <p>Drag the slider to compare before and after</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-3 mb-4">
+                    <img src="resources/logo-icon.png" alt="ClearBG" class="w-8 h-8">
+                    <span class="text-xl font-bold">ClearBG</span>
+                </div>
+                <p class="text-gray-400 mb-6">
+                    Professional AI-powered background removal for creators and businesses.
+                </p>
+                <div class="text-sm text-gray-500">
+                    © 2025 ClearBG. All rights reserved. | Privacy Policy | Terms of Service
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Gallery functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filter functionality
+            const filterTabs = document.querySelectorAll('.filter-tab');
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            
+            filterTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const filter = this.dataset.filter;
+                    
+                    // Update active tab
+                    filterTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Filter gallery items
+                    galleryItems.forEach(item => {
+                        if (filter === 'all' || item.dataset.category === filter) {
+                            item.style.display = 'block';
+                            anime({
+                                targets: item,
+                                opacity: [0, 1],
+                                scale: [0.8, 1],
+                                duration: 300,
+                                easing: 'easeOutQuad'
+                            });
+                        } else {
+                            anime({
+                                targets: item,
+                                opacity: [1, 0],
+                                scale: [1, 0.8],
+                                duration: 200,
+                                easing: 'easeInQuad',
+                                complete: function() {
+                                    item.style.display = 'none';
+                                }
+                            });
+                        }
+                    });
+                });
+            });
+            
+            // Modal functionality
+            const modal = document.getElementById('comparison-modal');
+            const modalBefore = document.getElementById('modal-before');
+            const modalAfter = document.getElementById('modal-after');
+            const closeModal = document.getElementById('close-modal');
+            
+            galleryItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const beforeSrc = this.dataset.before;
+                    const afterSrc = this.dataset.after;
+                    
+                    modalBefore.src = beforeSrc;
+                    modalAfter.src = afterSrc;
+                    modal.classList.add('active');
+                    
+                    // Animate modal in
+                    anime({
+                        targets: '.modal-content',
+                        scale: [0.8, 1],
+                        opacity: [0, 1],
+                        duration: 300,
+                        easing: 'easeOutQuad'
+                    });
+                });
+            });
+            
+            // Close modal
+            closeModal.addEventListener('click', function() {
+                anime({
+                    targets: '.modal-content',
+                    scale: [1, 0.8],
+                    opacity: [1, 0],
+                    duration: 200,
+                    easing: 'easeInQuad',
+                    complete: function() {
+                        modal.classList.remove('active');
+                    }
+                });
+            });
+            
+            // Close modal on background click
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeModal.click();
+                }
+            });
+            
+            // Modal comparison slider
+            const modalSlider = document.querySelector('.modal-slider');
+            let isDragging = false;
+            
+            modalSlider.addEventListener('mousedown', function(e) {
+                isDragging = true;
+                e.preventDefault();
+            });
+            
+            document.addEventListener('mousemove', function(e) {
+                if (!isDragging) return;
+                
+                const slider = document.querySelector('.comparison-slider-modal');
+                const rect = slider.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
+                
+                modalSlider.style.left = percentage + '%';
+                modalAfter.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
+            });
+            
+            document.addEventListener('mouseup', function() {
+                isDragging = false;
+            });
+            
+            // Touch events for mobile
+            modalSlider.addEventListener('touchstart', function(e) {
+                isDragging = true;
+                e.preventDefault();
+            });
+            
+            document.addEventListener('touchmove', function(e) {
+                if (!isDragging) return;
+                
+                const slider = document.querySelector('.comparison-slider-modal');
+                const rect = slider.getBoundingClientRect();
+                const x = e.touches[0].clientX - rect.left;
+                const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
+                
+                modalSlider.style.left = percentage + '%';
+                modalAfter.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
+            });
+            
+            document.addEventListener('touchend', function() {
+                isDragging = false;
+            });
+        });
+        
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    anime({
+                        targets: entry.target,
+                        opacity: [0, 1],
+                        translateY: [20, 0],
+                        duration: 600,
+                        easing: 'easeOutQuad'
+                    });
+                }
+            });
+        }, observerOptions);
+        
+        // Observe gallery items for scroll animations
+        document.querySelectorAll('.gallery-item').forEach((item, index) => {
+            item.style.opacity = '0';
+            item.style.transform = 'translateY(20px)';
+            observer.observe(item);
+        });
+    </script>
+</body>
+</html>

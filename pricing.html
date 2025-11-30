@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing - ClearBG | Free & Premium Background Removal</title>
+    <meta name="description" content="Choose the perfect plan for your needs. Free tier for casual users, Premium for professionals. 50% off limited time offer.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Core Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#2D3748',
+                        'secondary': '#4FD1C7',
+                        'accent': '#F6AD55',
+                        'bg-light': '#FAFAFA'
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .pricing-card {
+            transition: all 0.3s ease;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-8px);
+        }
+        
+        .popular-badge {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .feature-check {
+            color: #4FD1C7;
+        }
+        
+        .feature-cross {
+            color: #CBD5E0;
+        }
+        
+        .roi-calculator {
+            background: linear-gradient(135deg, rgba(79, 209, 199, 0.1), rgba(246, 173, 85, 0.1));
+        }
+    </style>
+</head>
+<body class="bg-bg-light font-sans">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white/95 backdrop-blur-md border-b border-gray-200 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <img src="resources/logo-icon.png" alt="ClearBG" class="w-8 h-8">
+                    <span class="text-xl font-bold text-primary">ClearBG</span>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-600 hover:text-primary transition-colors">Tool</a>
+                    <a href="pricing.html" class="text-primary font-medium border-b-2 border-secondary pb-1">Pricing</a>
+                    <a href="gallery.html" class="text-gray-600 hover:text-primary transition-colors">Gallery</a>
+                    <a href="about.html" class="text-gray-600 hover:text-primary transition-colors">About</a>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button class="text-gray-600 hover:text-primary transition-colors">Sign In</button>
+                    <button class="bg-secondary text-white px-4 py-2 rounded-lg hover:bg-teal-600 transition-colors">
+                        Start Free Trial
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Pricing Hero -->
+    <section class="pt-24 pb-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h1 class="text-5xl font-bold text-primary mb-6">
+                    Simple, Transparent Pricing
+                </h1>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+                    Choose the perfect plan for your needs. Start free, upgrade when you're ready. 
+                    No hidden fees, cancel anytime.
+                </p>
+                
+                <!-- Billing Toggle -->
+                <div class="flex items-center justify-center space-x-4 mb-8">
+                    <span class="text-gray-600">Monthly</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="billing-toggle" class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-secondary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+                    </label>
+                    <span class="text-gray-600">Yearly</span>
+                    <span class="bg-accent text-white text-xs px-2 py-1 rounded-full font-medium">Save 50%</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Cards -->
+    <section class="pb-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                
+                <!-- Free Plan -->
+                <div class="pricing-card bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold text-primary mb-2">Free</h3>
+                        <p class="text-gray-600 mb-6">Perfect for trying out</p>
+                        <div class="mb-6">
+                            <span class="text-4xl font-bold text-primary">$0</span>
+                            <span class="text-gray-500">/month</span>
+                        </div>
+                        <button class="w-full bg-gray-100 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors">
+                            Current Plan
+                        </button>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 feature-check" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-700">3 images per day</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 feature-check" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-700">1024x1024 resolution</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 feature-check" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-700">Basic AI processing</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 feature-check" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-700">Watermarked downloads</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 feature-cross" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-400">Batch processing</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 feature-cross" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-400">API access</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Premium Plan -->
+                <div class="pricing-card bg-white rounded-2xl shadow-xl p-8 border-2 border-secondary relative">
+                    <div class="popular-badge absolute -top-4 left-1/2 transform -translate-x-1/2">
+                        <span class="bg-accent text-white px-4 py-1 rounded-full text-sm font-bold">MOST POPULAR</span>
+                    </div>
+                    
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold text-primary mb-2">Premium</h3>
+                        <p class="text-gray-600 mb-6">For professionals & businesses</p>
+                        <div class="mb-6">
+                            <div class="flex items-center justify-center space-x-2">
+                                <span class="text-xl text-gray-400 line-through" id="premium-old-price">$29</span>
+                                <span class="text-4xl font-bold text-primary" id="premium-price">$14.50</span>
+                            </div>
+                            <span class="text-gray-500" id="premium-period">/month</span>
+                            <div class="text-sm text-accent font-medium mt-1">Limited Time: 50% Off</div>
+                        </div>
+                        <button class="w-full bg-secondary text-white py-3 rounded-lg font-semibold hover:bg-teal-600 transition-colors">
+                            Start Free Trial
+                        </button>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 feature-check" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-700">Unlimited images</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 feature-check" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-700">Up to 4K resolution</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 feature-check" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-700">Advanced AI processing</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 feature-check" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-700">No watermarks</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 feature-check" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-700">Batch processing (100 images)</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 feature-check" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-700">API access (1000 calls/day)</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 feature-check" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-700">Priority support</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pro Plan -->
+                <div class="pricing-card bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold text-primary mb-2">Pro</h3>
+                        <p class="text-gray-600 mb-6">For agencies & enterprises</p>
+                        <div class="mb-6">
+                            <span class="text-4xl font-bold text-primary" id="pro-price">$99</span>
+                            <span class="text-gray-500" id="pro-period">/month</span>
+                        </div>
+                        <button class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors">
+                            Contact Sales
+                        </button>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 feature-check" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-700">Unlimited images</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 feature-check" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-700">Up to 8K resolution</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 feature-check" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-700">Custom AI models</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 feature-check" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-700">White-label option</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 feature-check" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-700">Unlimited batch processing</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 feature-check" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-700">Unlimited API access</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 feature-check" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-700">Dedicated support</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 feature-check" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-gray-700">SLA guarantee</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ROI Calculator -->
+    <section class="py-20 roi-calculator">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-primary mb-4">Calculate Your Savings</h2>
+                <p class="text-lg text-gray-600">
+                    See how much time and money ClearBG can save your business
+                </p>
+            </div>
+            
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="space-y-6">
+                        <h3 class="text-xl font-semibold text-primary mb-4">Your Current Workflow</h3>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Images processed per month</label>
+                            <input type="range" id="images-slider" min="10" max="1000" value="100" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            <div class="flex justify-between text-sm text-gray-500 mt-1">
+                                <span>10</span>
+                                <span id="images-value" class="font-medium text-primary">100</span>
+                                <span>1000+</span>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Time per image (minutes)</label>
+                            <input type="range" id="time-slider" min="1" max="30" value="5" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            <div class="flex justify-between text-sm text-gray-500 mt-1">
+                                <span>1 min</span>
+                                <span id="time-value" class="font-medium text-primary">5</span>
+                                <span>30+ min</span>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Hourly rate ($)</label>
+                            <input type="range" id="rate-slider" min="15" max="150" value="50" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            <div class="flex justify-between text-sm text-gray-500 mt-1">
+                                <span>$15</span>
+                                <span id="rate-value" class="font-medium text-primary">$50</span>
+                                <span>$150+</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <h3 class="text-xl font-semibold text-primary mb-4">Your Savings with ClearBG</h3>
+                        
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                                <span class="text-gray-600">Time saved per month</span>
+                                <span class="font-bold text-primary" id="time-saved">8.3 hours</span>
+                            </div>
+                            
+                            <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                                <span class="text-gray-600">Money saved per month</span>
+                                <span class="font-bold text-secondary" id="money-saved">$417</span>
+                            </div>
+                            
+                            <div class="flex justify-between items-center p-4 bg-secondary/10 rounded-lg">
+                                <span class="text-gray-700 font-medium">ClearBG Premium cost</span>
+                                <span class="font-bold text-primary">$14.50</span>
+                            </div>
+                            
+                            <div class="flex justify-between items-center p-4 bg-accent/10 rounded-lg">
+                                <span class="text-gray-700 font-medium">Net savings</span>
+                                <span class="font-bold text-accent text-lg" id="net-savings">$402.50</span>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-6">
+                            <button class="bg-secondary text-white px-8 py-3 rounded-lg font-semibold hover:bg-teal-600 transition-colors">
+                                Start Saving Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-primary mb-4">Frequently Asked Questions</h2>
+                <p class="text-lg text-gray-600">
+                    Everything you need to know about ClearBG pricing
+                </p>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-primary mb-2">Can I cancel anytime?</h3>
+                    <p class="text-gray-600">Yes, you can cancel your subscription at any time. You'll continue to have access until the end of your current billing period.</p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-primary mb-2">What happens if I exceed the free limit?</h3>
+                    <p class="text-gray-600">You'll be prompted to upgrade to Premium when you reach your daily limit. Your processed images remain accessible.</p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-primary mb-2">Is there a trial for Premium?</h3>
+                    <p class="text-gray-600">Yes! New users get a 7-day free trial of Premium features. No credit card required to start.</p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-primary mb-2">Do you offer refunds?</h3>
+                    <p class="text-gray-600">We offer a 30-day money-back guarantee. If you're not satisfied, we'll refund your payment.</p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-primary mb-2">What payment methods do you accept?</h3>
+                    <p class="text-gray-600">We accept all major credit cards, PayPal, and bank transfers for enterprise customers.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-primary text-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl font-bold mb-4">Ready to Get Started?</h2>
+            <p class="text-xl text-gray-300 mb-8">
+                Join thousands of professionals who trust ClearBG for their background removal needs
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button class="bg-secondary text-white px-8 py-4 rounded-lg font-semibold hover:bg-teal-600 transition-colors">
+                    Start Free Trial
+                </button>
+                <button class="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-primary transition-colors">
+                    Contact Sales
+                </button>
+            </div>
+            
+            <div class="mt-8 text-sm text-gray-400">
+                No credit card required • 7-day free trial • Cancel anytime
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-3 mb-4">
+                    <img src="resources/logo-icon.png" alt="ClearBG" class="w-8 h-8">
+                    <span class="text-xl font-bold">ClearBG</span>
+                </div>
+                <p class="text-gray-400 mb-6">
+                    Professional AI-powered background removal for creators and businesses.
+                </p>
+                <div class="text-sm text-gray-500">
+                    © 2025 ClearBG. All rights reserved. | Privacy Policy | Terms of Service
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ROI Calculator functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const imagesSlider = document.getElementById('images-slider');
+            const timeSlider = document.getElementById('time-slider');
+            const rateSlider = document.getElementById('rate-slider');
+            
+            const imagesValue = document.getElementById('images-value');
+            const timeValue = document.getElementById('time-value');
+            const rateValue = document.getElementById('rate-value');
+            
+            const timeSaved = document.getElementById('time-saved');
+            const moneySaved = document.getElementById('money-saved');
+            const netSavings = document.getElementById('net-savings');
+            
+            function updateCalculations() {
+                const images = parseInt(imagesSlider.value);
+                const timePerImage = parseInt(timeSlider.value);
+                const hourlyRate = parseInt(rateSlider.value);
+                
+                imagesValue.textContent = images;
+                timeValue.textContent = timePerImage;
+                rateValue.textContent = '$' + hourlyRate;
+                
+                // Calculate savings
+                const totalMinutes = images * timePerImage;
+                const totalHours = totalMinutes / 60;
+                const currentCost = totalHours * hourlyRate;
+                
+                timeSaved.textContent = totalHours.toFixed(1) + ' hours';
+                moneySaved.textContent = '$' + currentCost.toFixed(0);
+                
+                const clearBGCost = 14.50;
+                const savings = currentCost - clearBGCost;
+                netSavings.textContent = '$' + savings.toFixed(2);
+            }
+            
+            imagesSlider.addEventListener('input', updateCalculations);
+            timeSlider.addEventListener('input', updateCalculations);
+            rateSlider.addEventListener('input', updateCalculations);
+            
+            // Billing toggle functionality
+            const billingToggle = document.getElementById('billing-toggle');
+            const premiumPrice = document.getElementById('premium-price');
+            const premiumOldPrice = document.getElementById('premium-old-price');
+            const premiumPeriod = document.getElementById('premium-period');
+            const proPrice = document.getElementById('pro-price');
+            const proPeriod = document.getElementById('pro-period');
+            
+            billingToggle.addEventListener('change', function() {
+                if (this.checked) {
+                    // Yearly billing
+                    premiumPrice.textContent = '$145';
+                    premiumOldPrice.textContent = '$290';
+                    premiumPeriod.textContent = '/year';
+                    proPrice.textContent = '$990';
+                    proPeriod.textContent = '/year';
+                } else {
+                    // Monthly billing
+                    premiumPrice.textContent = '$14.50';
+                    premiumOldPrice.textContent = '$29';
+                    premiumPeriod.textContent = '/month';
+                    proPrice.textContent = '$99';
+                    proPeriod.textContent = '/month';
+                }
+            });
+            
+            // Initialize calculations
+            updateCalculations();
+        });
+        
+        // Smooth scrolling for CTA buttons
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', function() {
+                if (this.textContent.includes('Start Free Trial')) {
+                    // Track conversion event
+                    console.log('Free trial clicked');
+                } else if (this.textContent.includes('Contact Sales')) {
+                    console.log('Contact sales clicked');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

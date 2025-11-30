@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - ClearBG | AI Background Removal Technology</title>
+    <meta name="description" content="Learn about ClearBG's advanced AI technology, our mission to democratize professional image editing, and the team behind the magic.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Core Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#2D3748',
+                        'secondary': '#4FD1C7',
+                        'accent': '#F6AD55',
+                        'bg-light': '#FAFAFA'
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .tech-card {
+            transition: all 0.3s ease;
+        }
+        
+        .tech-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .process-step {
+            position: relative;
+        }
+        
+        .process-step::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -20px;
+            width: 40px;
+            height: 2px;
+            background: #4FD1C7;
+            transform: translateY(-50%);
+        }
+        
+        .process-step:last-child::after {
+            display: none;
+        }
+        
+        .api-code {
+            background: #1a202c;
+            color: #e2e8f0;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        }
+        
+        .security-badge {
+            background: linear-gradient(135deg, #4FD1C7, #38B2AC);
+        }
+    </style>
+</head>
+<body class="bg-bg-light font-sans">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white/95 backdrop-blur-md border-b border-gray-200 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <img src="resources/logo-icon.png" alt="ClearBG" class="w-8 h-8">
+                    <span class="text-xl font-bold text-primary">ClearBG</span>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-600 hover:text-primary transition-colors">Tool</a>
+                    <a href="pricing.html" class="text-gray-600 hover:text-primary transition-colors">Pricing</a>
+                    <a href="gallery.html" class="text-gray-600 hover:text-primary transition-colors">Gallery</a>
+                    <a href="about.html" class="text-primary font-medium border-b-2 border-secondary pb-1">About</a>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button class="text-gray-600 hover:text-primary transition-colors">Sign In</button>
+                    <button class="bg-secondary text-white px-4 py-2 rounded-lg hover:bg-teal-600 transition-colors">
+                        Get Premium
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- About Hero -->
+    <section class="pt-24 pb-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-8">
+                    <div class="space-y-4">
+                        <h1 class="text-5xl font-bold text-primary leading-tight">
+                            Democratizing Professional
+                            <span class="text-secondary">Image Editing</span>
+                        </h1>
+                        <p class="text-xl text-gray-600 leading-relaxed">
+                            We believe everyone should have access to professional-grade image editing tools. 
+                            Our mission is to make complex AI technology simple, affordable, and accessible to creators worldwide.
+                        </p>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-secondary mb-2">2023</div>
+                            <div class="text-gray-600">Founded</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-secondary mb-2">50K+</div>
+                            <div class="text-gray-600">Users</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-secondary mb-2">2M+</div>
+                            <div class="text-gray-600">Images Processed</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-secondary mb-2">99.9%</div>
+                            <div class="text-gray-600">Uptime</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <img src="resources/hero-bg.jpg" alt="AI Technology Visualization" class="rounded-2xl shadow-2xl">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Deep Dive -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-primary mb-4">Powered by Advanced AI</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Our cutting-edge technology combines multiple AI models to deliver unprecedented accuracy and speed.
+                </p>
+            </div>
+            
+            <!-- Technology Stack -->
+            <div class="grid md:grid-cols-3 gap-8 mb-16">
+                <div class="tech-card bg-white rounded-2xl p-8 text-center">
+                    <div class="w-16 h-16 mx-auto bg-secondary/20 rounded-full flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-primary mb-4">Neural Networks</h3>
+                    <p class="text-gray-600">
+                        Deep convolutional neural networks trained on millions of images for pixel-perfect edge detection.
+                    </p>
+                </div>
+                
+                <div class="tech-card bg-white rounded-2xl p-8 text-center">
+                    <div class="w-16 h-16 mx-auto bg-accent/20 rounded-full flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-primary mb-4">Real-time Processing</h3>
+                    <p class="text-gray-600">
+                        Optimized inference engines that process images in under 3 seconds without compromising quality.
+                    </p>
+                </div>
+                
+                <div class="tech-card bg-white rounded-2xl p-8 text-center">
+                    <div class="w-16 h-16 mx-auto bg-primary/20 rounded-full flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-primary mb-4">Quality Assurance</h3>
+                    <p class="text-gray-600">
+                        Multi-stage validation pipeline ensures 98% accuracy across all image types and complexities.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Processing Pipeline -->
+            <div class="bg-white rounded-2xl p-8">
+                <h3 class="text-2xl font-bold text-primary mb-8 text-center">Our Processing Pipeline</h3>
+                
+                <div class="grid md:grid-cols-4 gap-8">
+                    <div class="process-step text-center">
+                        <div class="w-16 h-16 mx-auto bg-secondary rounded-full flex items-center justify-center mb-4">
+                            <span class="text-white font-bold text-xl">1</span>
+                        </div>
+                        <h4 class="font-semibold text-primary mb-2">Image Analysis</h4>
+                        <p class="text-sm text-gray-600">AI analyzes composition, identifies foreground subject and background elements</p>
+                    </div>
+                    
+                    <div class="process-step text-center">
+                        <div class="w-16 h-16 mx-auto bg-secondary rounded-full flex items-center justify-center mb-4">
+                            <span class="text-white font-bold text-xl">2</span>
+                        </div>
+                        <h4 class="font-semibold text-primary mb-2">Edge Detection</h4>
+                        <p class="text-sm text-gray-600">Advanced algorithms detect fine details like hair, fur, and transparent objects</p>
+                    </div>
+                    
+                    <div class="process-step text-center">
+                        <div class="w-16 h-16 mx-auto bg-secondary rounded-full flex items-center justify-center mb-4">
+                            <span class="text-white font-bold text-xl">3</span>
+                        </div>
+                        <h4 class="font-semibold text-primary mb-2">Background Removal</h4>
+                        <p class="text-sm text-gray-600">Intelligent segmentation separates subject from background with pixel precision</p>
+                    </div>
+                    
+                    <div class="process-step text-center">
+                        <div class="w-16 h-16 mx-auto bg-secondary rounded-full flex items-center justify-center mb-4">
+                            <span class="text-white font-bold text-xl">4</span>
+                        </div>
+                        <h4 class="font-semibold text-primary mb-2">Quality Enhancement</h4>
+                        <p class="text-sm text-gray-600">Final optimization and quality checks ensure professional results</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- API Documentation -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-primary mb-4">Developer-Friendly API</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Integrate ClearBG into your workflow with our simple, powerful REST API.
+                </p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-12">
+                <!-- API Features -->
+                <div class="space-y-8">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-8 h-8 bg-secondary rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-primary mb-2">Simple Integration</h3>
+                            <p class="text-gray-600">Get started in minutes with our well-documented REST API and comprehensive guides.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4">
+                        <div class="w-8 h-8 bg-secondary rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-primary mb-2">High Throughput</h3>
+                            <p class="text-gray-600">Process thousands of images per hour with our optimized infrastructure.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4">
+                        <div class="w-8 h-8 bg-secondary rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-primary mb-2">Multiple Formats</h3>
+                            <p class="text-gray-600">Support for JPG, PNG, WebP, and more with automatic format optimization.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4">
+                        <div class="w-8 h-8 bg-secondary rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-primary mb-2">Real-time Webhooks</h3>
+                            <p class="text-gray-600">Get instant notifications when processing is complete with configurable webhooks.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Code Example -->
+                <div class="api-code rounded-xl p-6 overflow-x-auto">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-sm text-gray-400">JavaScript Example</span>
+                        <button class="text-xs text-secondary hover:text-teal-400" onclick="copyCode()">Copy</button>
+                    </div>
+                    <pre class="text-sm leading-relaxed"><code>// Simple API integration
+const clearbg = require('clearbg-api');
+
+// Initialize client
+const client = new clearbg.Client({
+  apiKey: 'your-api-key',
+  baseUrl: 'https://api.clearbg.com/v1'
+});
+
+// Remove background
+async function removeBackground(imagePath) {
+  try {
+    const result = await client.removeBackground({
+      image: imagePath,
+      format: 'png',
+      size: '4k',
+      enhance: true
+    });
+    
+    console.log('Processing complete:', result);
+    return result.url;
+  } catch (error) {
+    console.error('Processing failed:', error);
+  }
+}</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security & Privacy -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-primary mb-4">Enterprise-Grade Security</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Your data security is our top priority. We implement industry-leading security measures to protect your images and information.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center space-y-4">
+                    <div class="security-badge w-16 h-16 mx-auto rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-primary">Encryption</h3>
+                    <p class="text-gray-600 text-sm">All data encrypted in transit and at rest with AES-256</p>
+                </div>
+                
+                <div class="text-center space-y-4">
+                    <div class="security-badge w-16 h-16 mx-auto rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-primary">Compliance</h3>
+                    <p class="text-gray-600 text-sm">GDPR, CCPA, and SOC 2 Type II certified</p>
+                </div>
+                
+                <div class="text-center space-y-4">
+                    <div class="security-badge w-16 h-16 mx-auto rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-primary">Privacy</h3>
+                    <p class="text-gray-600 text-sm">Images automatically deleted after processing</p>
+                </div>
+                
+                <div class="text-center space-y-4">
+                    <div class="security-badge w-16 h-16 mx-auto rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-primary">Access Control</h3>
+                    <p class="text-gray-600 text-sm">Role-based permissions and audit logging</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-primary mb-4">Meet the Team</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    A diverse group of AI researchers, engineers, and designers passionate about making technology accessible.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center space-y-4">
+                    <img src="resources/testimonial-1.jpg" alt="Sarah Chen" class="w-32 h-32 rounded-full mx-auto object-cover">
+                    <div>
+                        <h3 class="text-xl font-semibold text-primary">Sarah Chen</h3>
+                        <p class="text-secondary font-medium mb-2">CEO & Co-Founder</p>
+                        <p class="text-gray-600 text-sm">Former Google AI researcher with 10+ years in computer vision and machine learning.</p>
+                    </div>
+                </div>
+                
+                <div class="text-center space-y-4">
+                    <img src="resources/testimonial-2.jpg" alt="Marcus Rodriguez" class="w-32 h-32 rounded-full mx-auto object-cover">
+                    <div>
+                        <h3 class="text-xl font-semibold text-primary">Marcus Rodriguez</h3>
+                        <p class="text-secondary font-medium mb-2">CTO & Co-Founder</p>
+                        <p class="text-gray-600 text-sm">Ex-Adobe engineer specializing in image processing and GPU optimization.</p>
+                    </div>
+                </div>
+                
+                <div class="text-center space-y-4">
+                    <img src="resources/testimonial-3.jpg" alt="Jennifer Walsh" class="w-32 h-32 rounded-full mx-auto object-cover">
+                    <div>
+                        <h3 class="text-xl font-semibold text-primary">Jennifer Walsh</h3>
+                        <p class="text-secondary font-medium mb-2">Head of Product</p>
+                        <p class="text-gray-600 text-sm">Product leader with experience at Shopify and Canva, focused on creator tools.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-primary text-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl font-bold mb-4">Ready to Experience the Future?</h2>
+            <p class="text-xl text-gray-300 mb-8">
+                Join thousands of creators who trust ClearBG for professional background removal
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button class="bg-secondary text-white px-8 py-4 rounded-lg font-semibold hover:bg-teal-600 transition-colors">
+                    Try Free Now
+                </button>
+                <button class="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-primary transition-colors">
+                    Contact Sales
+                </button>
+            </div>
+            
+            <div class="mt-8 text-sm text-gray-400">
+                No credit card required • 7-day free trial • Cancel anytime
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-3 mb-4">
+                    <img src="resources/logo-icon.png" alt="ClearBG" class="w-8 h-8">
+                    <span class="text-xl font-bold">ClearBG</span>
+                </div>
+                <p class="text-gray-400 mb-6">
+                    Professional AI-powered background removal for creators and businesses.
+                </p>
+                <div class="text-sm text-gray-500">
+                    © 2025 ClearBG. All rights reserved. | Privacy Policy | Terms of Service
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Copy code functionality
+        function copyCode() {
+            const codeBlock = document.querySelector('.api-code code');
+            const text = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(text).then(function() {
+                // Show success message
+                const button = document.querySelector('[onclick="copyCode()"]');
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.color = '#4FD1C7';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.color = '';
+                }, 2000);
+            });
+        }
+        
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    anime({
+                        targets: entry.target,
+                        opacity: [0, 1],
+                        translateY: [20, 0],
+                        duration: 600,
+                        easing: 'easeOutQuad'
+                    });
+                }
+            });
+        }, observerOptions);
+        
+        // Observe elements for scroll animations
+        document.querySelectorAll('.tech-card, .process-step').forEach((el, index) => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            observer.observe(el);
+        });
+        
+        // Staggered animation for process steps
+        setTimeout(() => {
+            anime({
+                targets: '.process-step',
+                opacity: [0, 1],
+                translateY: [20, 0],
+                delay: anime.stagger(200),
+                duration: 600,
+                easing: 'easeOutQuad'
+            });
+        }, 500);
+    </script>
+</body>
+</html>

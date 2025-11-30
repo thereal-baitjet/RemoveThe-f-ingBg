@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClearBG - AI Background Removal Tool | Free & Premium</title>
+    <meta name="description" content="Remove backgrounds from images instantly with AI. Free tier available with premium features for professionals. Try now - no signup required.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Core Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+    
+    <!-- Splide CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#2D3748',
+                        'secondary': '#4FD1C7',
+                        'accent': '#F6AD55',
+                        'bg-light': '#FAFAFA'
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .particle-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        
+        .content-layer {
+            position: relative;
+            z-index: 10;
+        }
+        
+        .upload-zone {
+            border: 2px dashed #4FD1C7;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-zone.dragover {
+            border-color: #F6AD55;
+            background-color: rgba(246, 173, 85, 0.1);
+            transform: scale(1.02);
+        }
+        
+        .processing-bar {
+            background: linear-gradient(90deg, #4FD1C7, #F6AD55);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        .comparison-slider {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .slider-handle {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 100%;
+            background: #F6AD55;
+            cursor: ew-resize;
+            z-index: 10;
+        }
+        
+        .before-image, .after-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .after-image {
+            clip-path: inset(0 50% 0 0);
+        }
+        
+        .counter-animation {
+            font-variant-numeric: tabular-nums;
+        }
+        
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        
+        .feature-teaser {
+            background: linear-gradient(135deg, rgba(79, 209, 199, 0.1), rgba(246, 173, 85, 0.1));
+        }
+    </style>
+</head>
+<body class="bg-bg-light font-sans">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white/95 backdrop-blur-md border-b border-gray-200 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <img src="resources/logo-icon.png" alt="ClearBG" class="w-8 h-8">
+                    <span class="text-xl font-bold text-primary">ClearBG</span>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-primary font-medium border-b-2 border-secondary pb-1">Tool</a>
+                    <a href="pricing.html" class="text-gray-600 hover:text-primary transition-colors">Pricing</a>
+                    <a href="gallery.html" class="text-gray-600 hover:text-primary transition-colors">Gallery</a>
+                    <a href="about.html" class="text-gray-600 hover:text-primary transition-colors">About</a>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button onclick="showAPIConfiguration()" class="text-gray-600 hover:text-primary transition-colors text-sm">
+                        API Config
+                    </button>
+                    <button class="text-gray-600 hover:text-primary transition-colors">Sign In</button>
+                    <button class="bg-secondary text-white px-4 py-2 rounded-lg hover:bg-teal-600 transition-colors">
+                        Get Premium
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center overflow-hidden pt-16">
+        <div id="particle-container" class="particle-bg"></div>
+        
+        <div class="content-layer w-full">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <!-- Left Content -->
+                    <div class="space-y-8">
+                        <div class="space-y-4">
+                            <h1 class="text-5xl lg:text-6xl font-bold text-primary leading-tight">
+                                Remove Backgrounds
+                                <span class="text-secondary">Instantly</span>
+                            </h1>
+                            <p class="text-xl text-gray-600 leading-relaxed">
+                                AI-powered background removal in seconds. Get professional results without the learning curve. 
+                                <strong class="text-primary">Free to start, premium when you're ready.</strong>
+                            </p>
+                        </div>
+                        
+                        <!-- Social Proof Counter -->
+                        <div class="flex items-center space-x-6">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-secondary counter-animation" id="processed-counter">0</div>
+                                <div class="text-sm text-gray-500">Images Today</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-accent counter-animation">4.9</div>
+                                <div class="text-sm text-gray-500">User Rating</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-primary counter-animation">50K+</div>
+                                <div class="text-sm text-gray-500">Happy Users</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Quick Start CTA -->
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <button class="bg-secondary text-white px-8 py-4 rounded-xl font-semibold hover:bg-teal-600 transition-all transform hover:scale-105">
+                                Try Free Now
+                            </button>
+                            <button class="border-2 border-primary text-primary px-8 py-4 rounded-xl font-semibold hover:bg-primary hover:text-white transition-all">
+                                Watch Demo
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Content - Tool Interface -->
+                    <div class="bg-white rounded-2xl shadow-2xl p-8 space-y-6">
+                        <!-- Upload Zone -->
+                        <div id="upload-zone" class="upload-zone rounded-xl p-12 text-center cursor-pointer">
+                            <div class="space-y-4">
+                                <div class="w-16 h-16 mx-auto bg-secondary/20 rounded-full flex items-center justify-center">
+                                    <svg class="w-8 h-8 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-semibold text-primary">Drop your image here</h3>
+                                    <p class="text-gray-500">or click to browse files</p>
+                                    <p class="text-sm text-gray-400 mt-2">Supports JPG, PNG, WebP up to 10MB</p>
+                                </div>
+                            </div>
+                            <input type="file" id="file-input" class="hidden" accept="image/*">
+                        </div>
+                        
+                        <!-- Processing Area -->
+                        <div id="processing-area" class="hidden">
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm font-medium text-gray-600">Processing image...</span>
+                                    <span id="progress-text" class="text-sm text-secondary font-medium">0%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div id="progress-bar" class="processing-bar h-2 rounded-full" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Results Area -->
+                        <div id="results-area" class="hidden space-y-6">
+                            <div class="comparison-slider rounded-xl overflow-hidden" style="height: 300px">
+                                <img id="before-image" src="resources/demo-before.jpg" alt="Before" class="before-image">
+                                <img id="after-image" src="resources/demo-after.jpg" alt="After" class="after-image">
+                                <div class="slider-handle" style="left: 50%"></div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <div class="text-sm text-gray-600">
+                                    <span class="font-medium">Free Result:</span> 1024x1024, Watermarked
+                                    <span id="api-info" class="ml-2 text-yellow-600"></span>
+                                </div>
+                                <div class="flex space-x-3">
+                                    <button id="download-free" class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
+                                        Download Free
+                                    </button>
+                                    <button id="upgrade-premium" class="bg-accent text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition-colors">
+                                        Get HD Version
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Usage Limit Warning -->
+                        <div id="usage-warning" class="hidden bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                            <div class="flex items-center space-x-3">
+                                <svg class="w-5 h-5 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                </svg>
+                                <div class="text-sm text-yellow-800">
+                                    <strong>2 free images remaining today</strong> - <a href="pricing.html" class="underline">Upgrade for unlimited</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-primary mb-4">Why Choose ClearBG?</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Professional-grade background removal powered by advanced AI, designed for creators, businesses, and developers.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="text-center space-y-4">
+                    <div class="w-16 h-16 mx-auto bg-secondary/20 rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-primary">Lightning Fast</h3>
+                    <p class="text-gray-600">Process images in under 3 seconds with our optimized AI pipeline. No waiting, just results.</p>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="text-center space-y-4">
+                    <div class="w-16 h-16 mx-auto bg-accent/20 rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-primary">Pixel Perfect</h3>
+                    <p class="text-gray-600">Advanced edge detection preserves fine details like hair and transparent objects with 98% accuracy.</p>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="text-center space-y-4">
+                    <div class="w-16 h-16 mx-auto bg-primary/20 rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-primary">Batch Processing</h3>
+                    <p class="text-gray-600">Process hundreds of images simultaneously. Perfect for e-commerce and content creators.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof Section -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-primary mb-4">Trusted by Professionals</h2>
+                <p class="text-lg text-gray-600">Join thousands of creators, businesses, and developers who trust ClearBG</p>
+            </div>
+            
+            <!-- Testimonials Carousel -->
+            <div class="splide" id="testimonials-carousel">
+                <div class="splide__track">
+                    <ul class="splide__list">
+                        <li class="splide__slide">
+                            <div class="testimonial-card rounded-2xl p-8 max-w-2xl mx-auto">
+                                <div class="flex items-center space-x-4 mb-6">
+                                    <img src="resources/testimonial-1.jpg" alt="Sarah Chen" class="w-16 h-16 rounded-full object-cover">
+                                    <div>
+                                        <h4 class="font-semibold text-primary">Sarah Chen</h4>
+                                        <p class="text-gray-600">E-commerce Director</p>
+                                        <div class="flex text-accent mt-1">
+                                            <span>★★★★★</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="text-gray-700 text-lg leading-relaxed">
+                                    "ClearBG transformed our product photography workflow. What used to take hours now takes minutes. 
+                                    The quality is consistently excellent, and the batch processing feature saves us thousands in photography costs."
+                                </p>
+                            </div>
+                        </li>
+                        
+                        <li class="splide__slide">
+                            <div class="testimonial-card rounded-2xl p-8 max-w-2xl mx-auto">
+                                <div class="flex items-center space-x-4 mb-6">
+                                    <img src="resources/testimonial-2.jpg" alt="Marcus Rodriguez" class="w-16 h-16 rounded-full object-cover">
+                                    <div>
+                                        <h4 class="font-semibold text-primary">Marcus Rodriguez</h4>
+                                        <p class="text-gray-600">Graphic Designer</p>
+                                        <div class="flex text-accent mt-1">
+                                            <span>★★★★★</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="text-gray-700 text-lg leading-relaxed">
+                                    "As a freelancer, ClearBG is my secret weapon. The AI handles complex edges perfectly, 
+                                    and the pay-per-use model means I'm not locked into expensive subscriptions. Game changer!"
+                                </p>
+                            </div>
+                        </li>
+                        
+                        <li class="splide__slide">
+                            <div class="testimonial-card rounded-2xl p-8 max-w-2xl mx-auto">
+                                <div class="flex items-center space-x-4 mb-6">
+                                    <img src="resources/testimonial-3.jpg" alt="Jennifer Walsh" class="w-16 h-16 rounded-full object-cover">
+                                    <div>
+                                        <h4 class="font-semibold text-primary">Jennifer Walsh</h4>
+                                        <p class="text-gray-600">Marketing Agency CEO</p>
+                                        <div class="flex text-accent mt-1">
+                                            <span>★★★★★</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="text-gray-700 text-lg leading-relaxed">
+                                    "We process over 500 images daily for our clients. ClearBG's API integration and consistent quality 
+                                    have made it an essential tool in our marketing stack. ROI was immediate."
+                                </p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feature Teasers -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-4xl font-bold text-primary mb-6">Ready to Scale Your Content?</h2>
+                    <p class="text-xl text-gray-600 mb-8">
+                        Unlock professional-grade features designed for serious creators and businesses.
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-6 h-6 bg-secondary rounded-full flex items-center justify-center mt-1">
+                                <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-primary">4K Resolution Output</h3>
+                                <p class="text-gray-600">Crystal clear results for print and digital use</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="w-6 h-6 bg-secondary rounded-full flex items-center justify-center mt-1">
+                                <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-primary">Batch Processing</h3>
+                                <p class="text-gray-600">Process 100+ images simultaneously</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="w-6 h-6 bg-secondary rounded-full flex items-center justify-center mt-1">
+                                <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-primary">API Access</h3>
+                                <p class="text-gray-600">Integrate into your workflow seamlessly</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8">
+                        <a href="pricing.html" class="inline-flex items-center bg-accent text-white px-8 py-4 rounded-xl font-semibold hover:bg-yellow-600 transition-all transform hover:scale-105">
+                            See Premium Plans
+                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="feature-teaser rounded-2xl p-8">
+                    <div class="text-center mb-6">
+                        <h3 class="text-2xl font-bold text-primary mb-2">Limited Time Offer</h3>
+                        <p class="text-gray-600">Get 50% off your first month</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl p-6 space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Premium Monthly</span>
+                            <div class="text-right">
+                                <div class="text-sm text-gray-400 line-through">$29</div>
+                                <div class="text-xl font-bold text-accent">$14.50</div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-sm text-gray-500 space-y-1">
+                            <div>✓ Unlimited images</div>
+                            <div>✓ 4K resolution</div>
+                            <div>✓ Batch processing</div>
+                            <div>✓ No watermarks</div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <div class="text-sm text-red-500 font-medium mb-2">
+                                ⏰ Offer expires in <span id="countdown-timer">23:59:45</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-3 mb-4">
+                    <img src="resources/logo-icon.png" alt="ClearBG" class="w-8 h-8">
+                    <span class="text-xl font-bold">ClearBG</span>
+                </div>
+                <p class="text-gray-400 mb-6">
+                    Professional AI-powered background removal for creators and businesses.
+                </p>
+                <div class="text-sm text-gray-500">
+                    © 2025 ClearBG. All rights reserved. | Privacy Policy | Terms of Service
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="env-loader.js"></script>
+    <script src="env.js"></script>
+    <script src="config.js"></script>
+    <script src="api-integration.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

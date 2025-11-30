@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - ClearBG | Background Removal API</title>
+    <meta name="description" content="Integrate ClearBG's background removal API into your application. Simple REST API with multiple providers and fallback support.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Core Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#2D3748',
+                        'secondary': '#4FD1C7',
+                        'accent': '#F6AD55',
+                        'bg-light': '#FAFAFA'
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .code-block {
+            background: #1a202c;
+            color: #e2e8f0;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        }
+        
+        .endpoint-card {
+            transition: all 0.3s ease;
+        }
+        
+        .endpoint-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .method-get { background-color: #48bb78; }
+        .method-post { background-color: #4299e1; }
+        .method-put { background-color: #ed8936; }
+        .method-delete { background-color: #f56565; }
+    </style>
+</head>
+<body class="bg-bg-light font-sans">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white/95 backdrop-blur-md border-b border-gray-200 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <img src="resources/logo-icon.png" alt="ClearBG" class="w-8 h-8">
+                    <span class="text-xl font-bold text-primary">ClearBG</span>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-600 hover:text-primary transition-colors">Tool</a>
+                    <a href="pricing.html" class="text-gray-600 hover:text-primary transition-colors">Pricing</a>
+                    <a href="gallery.html" class="text-gray-600 hover:text-primary transition-colors">Gallery</a>
+                    <a href="about.html" class="text-gray-600 hover:text-primary transition-colors">About</a>
+                    <a href="api-docs.html" class="text-primary font-medium border-b-2 border-secondary pb-1">API Docs</a>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button class="text-gray-600 hover:text-primary transition-colors">Sign In</button>
+                    <button class="bg-secondary text-white px-4 py-2 rounded-lg hover:bg-teal-600 transition-colors">
+                        Get API Key
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- API Docs Hero -->
+    <section class="pt-24 pb-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h1 class="text-5xl font-bold text-primary mb-6">
+                    Background Removal API
+                </h1>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+                    Integrate professional background removal into your application with our simple, 
+                    powerful REST API. Multiple providers, automatic fallback, and enterprise-grade reliability.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button class="bg-secondary text-white px-8 py-3 rounded-lg font-semibold hover:bg-teal-600 transition-colors">
+                        Get API Key
+                    </button>
+                    <button class="border-2 border-primary text-primary px-8 py-3 rounded-lg font-semibold hover:bg-primary hover:text-white transition-colors">
+                        Try in Browser
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Start -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-primary mb-4">Quick Start</h2>
+                <p class="text-lg text-gray-600">Get started in minutes with our simple integration</p>
+            </div>
+            
+            <div class="grid lg:grid-cols-3 gap-8">
+                <div class="text-center space-y-4">
+                    <div class="w-16 h-16 mx-auto bg-secondary rounded-full flex items-center justify-center">
+                        <span class="text-white font-bold text-xl">1</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-primary">Get API Key</h3>
+                    <p class="text-gray-600">Sign up for free and get your API key instantly</p>
+                </div>
+                
+                <div class="text-center space-y-4">
+                    <div class="w-16 h-16 mx-auto bg-secondary rounded-full flex items-center justify-center">
+                        <span class="text-white font-bold text-xl">2</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-primary">Make API Call</h3>
+                    <p class="text-gray-600">Send your image to our REST API endpoint</p>
+                </div>
+                
+                <div class="text-center space-y-4">
+                    <div class="w-16 h-16 mx-auto bg-secondary rounded-full flex items-center justify-center">
+                        <span class="text-white font-bold text-xl">3</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-primary">Get Result</h3>
+                    <p class="text-gray-600">Receive your image with background removed</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- API Reference -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-primary mb-4">API Reference</h2>
+                <p class="text-xl text-gray-600">Comprehensive documentation for all API endpoints</p>
+            </div>
+            
+            <!-- Main API Endpoint -->
+            <div class="endpoint-card bg-white rounded-2xl shadow-lg p-8 mb-8 border border-gray-200">
+                <div class="flex items-center space-x-4 mb-6">
+                    <span class="method-post text-white px-3 py-1 rounded text-sm font-semibold">POST</span>
+                    <code class="text-primary font-mono text-lg">/v1/remove-background</code>
+                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">Primary</span>
+                </div>
+                
+                <h3 class="text-xl font-semibold text-primary mb-4">Remove Background</h3>
+                <p class="text-gray-600 mb-6">Main endpoint for background removal. Supports multiple image formats and providers.</p>
+                
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="font-semibold text-primary mb-3">Request Parameters</h4>
+                        <div class="space-y-4">
+                            <div class="border-l-4 border-secondary pl-4">
+                                <div class="font-medium text-primary">image_file</div>
+                                <div class="text-sm text-gray-600">Required. Image file to process (JPG, PNG, WebP, max 10MB)</div>
+                            </div>
+                            <div class="border-l-4 border-gray-300 pl-4">
+                                <div class="font-medium text-primary">size</div>
+                                <div class="text-sm text-gray-600">Optional. Output size: 'auto', 'preview', 'full' (default: 'auto')</div>
+                            </div>
+                            <div class="border-l-4 border-gray-300 pl-4">
+                                <div class="font-medium text-primary">format</div>
+                                <div class="text-sm text-gray-600">Optional. Output format: 'png', 'jpg', 'webp' (default: 'png')</div>
+                            </div>
+                            <div class="border-l-4 border-gray-300 pl-4">
+                                <div class="font-medium text-primary">provider</div>
+                                <div class="text-sm text-gray-600">Optional. Force specific provider: 'removebg', 'photoroom' (default: auto-select)</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-medium text-primary mb-3">Response</h4>
+                        <div class="code-block rounded-lg p-4 text-sm">
+<pre>{
+  "success": true,
+  "image_url": "https://api.clearbg.com/results/abc123.png",
+  "provider_used": "removebg",
+  "credits_used": 1,
+  "processing_time": 2.3
+}</pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8">
+                    <h4 class="font-semibold text-primary mb-3">Example Request</h4>
+                    <div class="code-block rounded-lg p-4 text-sm">
+<pre>curl -X POST https://api.clearbg.com/v1/remove-background \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -F "image_file=@/path/to/image.jpg" \
+  -F "size=full" \
+  -F "format=png"</pre>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Batch Processing Endpoint -->
+            <div class="endpoint-card bg-white rounded-2xl shadow-lg p-8 mb-8 border border-gray-200">
+                <div class="flex items-center space-x-4 mb-6">
+                    <span class="method-post text-white px-3 py-1 rounded text-sm font-semibold">POST</span>
+                    <code class="text-primary font-mono text-lg">/v1/batch-remove</code>
+                    <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">Premium</span>
+                </div>
+                
+                <h3 class="text-xl font-semibold text-primary mb-4">Batch Background Removal</h3>
+                <p class="text-gray-600 mb-6">Process multiple images in a single request. Perfect for bulk operations.</p>
+                
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="font-semibold text-primary mb-3">Request Body</h4>
+                        <div class="code-block rounded-lg p-4 text-sm">
+<pre>{
+  "images": [
+    {
+      "image_file": "base64_encoded_image",
+      "filename": "image1.jpg"
+    }
+  ],
+  "size": "full",
+  "format": "png",
+  "webhook_url": "https://your-app.com/webhook"
+}</pre>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-medium text-primary mb-3">Response</h4>
+                        <div class="code-block rounded-lg p-4 text-sm">
+<pre>{
+  "success": true,
+  "batch_id": "batch_123",
+  "status": "processing",
+  "estimated_time": 15,
+  "credits_used": 10
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Status Endpoint -->
+            <div class="endpoint-card bg-white rounded-2xl shadow-lg p-8 mb-8 border border-gray-200">
+                <div class="flex items-center space-x-4 mb-6">
+                    <span class="method-get text-white px-3 py-1 rounded text-sm font-semibold">GET</span>
+                    <code class="text-primary font-mono text-lg">/v1/status/{batch_id}</code>
+                </div>
+                
+                <h3 class="text-xl font-semibold text-primary mb-4">Check Batch Status</h3>
+                <p class="text-gray-600 mb-6">Check the status of a batch processing job.</p>
+                
+                <div class="code-block rounded-lg p-4 text-sm">
+<pre>{
+  "success": true,
+  "batch_id": "batch_123",
+  "status": "completed",
+  "progress": 100,
+  "results": [
+    {
+      "image_url": "https://api.clearbg.com/results/abc123.png",
+      "status": "success"
+    }
+  ]
+}</pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript SDK -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-primary mb-4">JavaScript SDK</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Simple integration for web applications with automatic fallback and retry logic.
+                </p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-12">
+                <div>
+                    <h3 class="text-2xl font-semibold text-primary mb-6">Installation</h3>
+                    <div class="code-block rounded-lg p-4 text-sm mb-6">
+<pre>// NPM
+npm install clearbg-js
+
+// CDN
+&lt;script src="https://cdn.clearbg.com/js/clearbg.min.js"&gt;&lt;/script&gt;</pre>
+                    </div>
+                    
+                    <h3 class="text-2xl font-semibold text-primary mb-6">Basic Usage</h3>
+                    <div class="code-block rounded-lg p-4 text-sm">
+<pre>import ClearBG from 'clearbg-js';
+
+const clearbg = new ClearBG({
+  apiKey: 'your-api-key',
+  fallback: true // Enable automatic fallback
+});
+
+// Remove background from file input
+async function removeBackground(file) {
+  try {
+    const result = await clearbg.removeBackground({
+      imageFile: file,
+      size: 'full',
+      format: 'png'
+    });
+    
+    console.log('Result:', result.imageUrl);
+    return result.imageUrl;
+  } catch (error) {
+    console.error('Processing failed:', error);
+  }
+}</pre>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-2xl font-semibold text-primary mb-6">Advanced Features</h3>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="font-semibold text-primary mb-2">Batch Processing</h4>
+                            <div class="code-block rounded-lg p-4 text-sm">
+<pre>const batch = await clearbg.batchRemove({
+  images: [file1, file2, file3],
+  webhook: 'https://your-app.com/webhook'
+});
+
+console.log('Batch ID:', batch.batchId);</pre>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-semibold text-primary mb-2">Progress Tracking</h4>
+                            <div class="code-block rounded-lg p-4 text-sm">
+<pre>const result = await clearbg.removeBackground({
+  imageFile: file,
+  onProgress: (progress) => {
+    console.log(`Progress: ${progress}%`);
+  }
+});</pre>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-semibold text-primary mb-2">Provider Selection</h4>
+                            <div class="code-block rounded-lg p-4 text-sm">
+<pre>// Force specific provider
+const result = await clearbg.removeBackground({
+  imageFile: file,
+  provider: 'removebg' // or 'photoroom'
+});</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Supported Providers -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-primary mb-4">Supported Providers</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Our API intelligently selects the best provider for each image, with automatic fallback.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-gray-50 rounded-2xl p-8">
+                    <div class="flex items-center space-x-4 mb-6">
+                        <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold">RB</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-primary">Remove.bg</h3>
+                            <p class="text-gray-600">Industry leader in background removal</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-sm text-gray-600">High accuracy for complex images</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-sm text-gray-600">Excellent hair and fur detection</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-sm text-gray-600">Fast processing (2-5 seconds)</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 rounded-2xl p-8">
+                    <div class="flex items-center space-x-4 mb-6">
+                        <div class="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold">PR</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-primary">PhotoRoom</h3>
+                            <p class="text-gray-600">Advanced AI with creative features</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-sm text-gray-600">Custom background replacement</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-sm text-gray-600">High-resolution output</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-sm text-gray-600">Creative editing tools</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-primary mb-4">Simple, Transparent Pricing</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Pay only for what you use. No hidden fees, no complex tiers.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-2xl p-8 shadow-lg text-center">
+                    <h3 class="text-xl font-semibold text-primary mb-2">Free Tier</h3>
+                    <div class="text-3xl font-bold text-secondary mb-4">$0</div>
+                    <ul class="space-y-2 text-sm text-gray-600 mb-6">
+                        <li>50 images/month</li>
+                        <li>Basic resolution</li>
+                        <li>Community support</li>
+                        <li>Mock API for testing</li>
+                    </ul>
+                    <button class="w-full bg-gray-100 text-gray-700 py-2 rounded-lg font-semibold hover:bg-gray-200 transition-colors">
+                        Current Plan
+                    </button>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-8 shadow-lg text-center border-2 border-secondary">
+                    <div class="bg-accent text-white px-3 py-1 rounded-full text-xs font-bold mb-4 inline-block">
+                        POPULAR
+                    </div>
+                    <h3 class="text-xl font-semibold text-primary mb-2">Developer</h3>
+                    <div class="text-3xl font-bold text-secondary mb-4">$0.10<span class="text-lg text-gray-500">/image</span></div>
+                    <ul class="space-y-2 text-sm text-gray-600 mb-6">
+                        <li>Pay as you go</li>
+                        <li>High resolution</li>
+                        <li>All providers</li>
+                        <li>Email support</li>
+                    </ul>
+                    <button class="w-full bg-secondary text-white py-2 rounded-lg font-semibold hover:bg-teal-600 transition-colors">
+                        Upgrade
+                    </button>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-8 shadow-lg text-center">
+                    <h3 class="text-xl font-semibold text-primary mb-2">Enterprise</h3>
+                    <div class="text-3xl font-bold text-secondary mb-4">Custom</div>
+                    <ul class="space-y-2 text-sm text-gray-600 mb-6">
+                        <li>Volume discounts</li>
+                        <li>Custom providers</li>
+                        <li>SLA guarantee</li>
+                        <li>Priority support</li>
+                    </ul>
+                    <button class="w-full bg-primary text-white py-2 rounded-lg font-semibold hover:bg-gray-800 transition-colors">
+                        Contact Sales
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Support -->
+    <section class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl font-bold text-primary mb-6">Need Help?</h2>
+            <p class="text-xl text-gray-600 mb-8">
+                Our team is here to help you integrate the API successfully.
+            </p>
+            
+            <div class="grid md:grid-cols-3 gap-8 mb-12">
+                <div class="space-y-4">
+                    <div class="w-12 h-12 mx-auto bg-secondary/20 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-primary">Documentation</h3>
+                    <p class="text-gray-600">Comprehensive guides and API reference</p>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="w-12 h-12 mx-auto bg-secondary/20 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-primary">Community</h3>
+                    <p class="text-gray-600">Join our developer community</p>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="w-12 h-12 mx-auto bg-secondary/20 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-primary">Support</h3>
+                    <p class="text-gray-600">Get help from our technical team</p>
+                </div>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button class="bg-secondary text-white px-8 py-3 rounded-lg font-semibold hover:bg-teal-600 transition-colors">
+                    Join Discord
+                </button>
+                <button class="border-2 border-primary text-primary px-8 py-3 rounded-lg font-semibold hover:bg-primary hover:text-white transition-colors">
+                    Contact Support
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-3 mb-4">
+                    <img src="resources/logo-icon.png" alt="ClearBG" class="w-8 h-8">
+                    <span class="text-xl font-bold">ClearBG</span>
+                </div>
+                <p class="text-gray-400 mb-6">
+                    Professional AI-powered background removal for creators and businesses.
+                </p>
+                <div class="text-sm text-gray-500">
+                    © 2025 ClearBG. All rights reserved. | Privacy Policy | Terms of Service
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Copy code functionality
+        function copyCode(element) {
+            const code = element.parentElement.querySelector('code, pre').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = element.textContent;
+                element.textContent = 'Copied!';
+                setTimeout(() => {
+                    element.textContent = originalText;
+                }, 2000);
+            });
+        }
+        
+        // Add copy buttons to code blocks
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.code-block').forEach(block => {
+                const button = document.createElement('button');
+                button.className = 'absolute top-2 right-2 text-xs text-secondary hover:text-teal-400 bg-gray-800 px-2 py-1 rounded';
+                button.textContent = 'Copy';
+                button.onclick = () => copyCode(button);
+                
+                block.style.position = 'relative';
+                block.appendChild(button);
+            });
+        });
+    </script>
+</body>
+</html>
