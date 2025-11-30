@@ -4,6 +4,8 @@ let testimonialsCarousel;
 let processedImages = 47832;
 let freeUsesRemaining = 3;
 let backgroundRemovalApp;
+let latestResultURL = null;
+let latestInputURL = null;
 
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
@@ -364,18 +366,18 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (downloadFree) {
         downloadFree.addEventListener('click', function() {
-            if (freeUsesRemaining > 0) {
-                // Simulate download with watermark
-                const link = document.createElement('a');
-                link.href = 'resources/demo-after.jpg';
-                link.download = 'clearbg-result-watermarked.jpg';
-                link.click();
-                
-                // Show success message
-                showNotification('Free image downloaded with watermark!', 'success');
-            } else {
-                showNotification('Free limit reached. Please upgrade to premium.', 'warning');
+            if (!latestResultURL) {
+                showNotification('Process an image first to download the result.', 'warning');
+                return;
             }
+            
+            const link = document.createElement('a');
+            link.href = latestResultURL;
+            link.download = 'clearbg-result.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showNotification('Image downloaded!', 'success');
         });
     }
     
@@ -522,6 +524,16 @@ async function handleFileUploadWithAPI(file) {
     uploadZone.style.display = 'none';
     processingArea.classList.remove('hidden');
     
+    // Update before image preview with the uploaded file
+    const beforeImage = document.getElementById('before-image');
+    if (beforeImage) {
+        if (latestInputURL) {
+            URL.revokeObjectURL(latestInputURL);
+        }
+        latestInputURL = URL.createObjectURL(file);
+        beforeImage.src = latestInputURL;
+    }
+    
     try {
         // Process with progress tracking
         const result = await backgroundRemovalApp.processImageWithProgress(file, (progress) => {
@@ -537,10 +549,33 @@ async function handleFileUploadWithAPI(file) {
             processingArea.classList.add('hidden');
             resultsArea.classList.remove('hidden');
             
+            // Update before image with the uploaded file (ensure fresh preview)
+            const beforeImage = document.getElementById('before-image');
+            if (beforeImage && file) {
+                if (latestInputURL) {
+                    URL.revokeObjectURL(latestInputURL);
+                }
+                latestInputURL = URL.createObjectURL(file);
+                beforeImage.src = latestInputURL;
+            }
+
             // Update result image
             const afterImage = document.getElementById('after-image');
             if (afterImage && result.result) {
+                if (latestResultURL) {
+                    URL.revokeObjectURL(latestResultURL);
+                }
+                latestResultURL = result.result;
                 afterImage.src = result.result;
+            }
+
+            // Reset comparison slider position
+            const sliderHandle = document.querySelector('.slider-handle');
+            if (sliderHandle) {
+                sliderHandle.style.left = '50%';
+            }
+            if (afterImage) {
+                afterImage.style.clipPath = 'inset(0 50% 0 0)';
             }
             
             // Update API info
