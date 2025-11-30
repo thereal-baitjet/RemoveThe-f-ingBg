@@ -308,8 +308,8 @@ function initializeComparisonSlider() {
     const setSplit = (percentage) => {
         const clamped = Math.max(0, Math.min(100, percentage));
         slider.style.left = clamped + '%';
-        afterImage.style.clipPath = `inset(0 ${100 - clamped}% 0 0)`;
-        afterImage.style.webkitClipPath = `inset(0 ${100 - clamped}% 0 0)`;
+        afterImage.style.clipPath = `inset(0 0 0 ${clamped}%)`;
+        afterImage.style.webkitClipPath = `inset(0 0 0 ${clamped}%)`;
     };
 
     const updateFromClientX = (clientX) => {
@@ -557,8 +557,8 @@ function setAfterPlaceholder(file) {
     // Reuse the same object URL as the input preview
     latestAfterPlaceholderURL = latestInputURL || URL.createObjectURL(file);
     afterImage.src = latestAfterPlaceholderURL;
-    afterImage.style.clipPath = 'inset(0 50% 0 0)';
-    afterImage.style.webkitClipPath = 'inset(0 50% 0 0)';
+    afterImage.style.clipPath = 'inset(0 0 0 50%)';
+    afterImage.style.webkitClipPath = 'inset(0 0 0 50%)';
 }
 
 // Keep the comparison slider images in sync and reset the handle
@@ -572,8 +572,8 @@ function updateComparisonSlider(beforeSrc, afterSrc) {
     }
     if (afterImage && afterSrc) {
         afterImage.src = afterSrc;
-        afterImage.style.clipPath = 'inset(0 50% 0 0)';
-        afterImage.style.webkitClipPath = 'inset(0 50% 0 0)';
+        afterImage.style.clipPath = 'inset(0 0 0 50%)';
+        afterImage.style.webkitClipPath = 'inset(0 0 0 50%)';
     }
     if (sliderHandle) {
         sliderHandle.style.left = '50%';
