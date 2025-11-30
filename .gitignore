@@ -5,3 +5,4 @@ env.js
 node_modules
 dist
 .vercel
+.env*.local
